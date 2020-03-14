@@ -1,0 +1,38 @@
+package com.shaylee.shirojwt.security.serivce;
+
+import com.shaylee.shirojwt.module.member.entity.MemberSecurity;
+import com.shaylee.shirojwt.security.model.SignInfo;
+
+/**
+ * Title: 会员Token 服务
+ * Project: shaylee-shiro
+ *
+ * @author Adrian
+ * @date 2020-03-14
+ */
+public interface MemberTokenService {
+
+    /**
+     * 验证令牌是否有效
+     *
+     * @param token 令牌
+     * @return true有效 false失效
+     */
+    Boolean isTokenValid(String token);
+
+    /**
+     * 刷新会员令牌(生成token且登录信息存Redis)
+     *
+     * @param memberSecurity 会员登录信息
+     * @return JWT签名信息
+     */
+    SignInfo refreshToken(MemberSecurity memberSecurity);
+
+    /**
+     * 根据会员号销毁token
+     *
+     * @param memberNo 会员号
+     */
+    void destroyToken(String memberNo);
+
+}
