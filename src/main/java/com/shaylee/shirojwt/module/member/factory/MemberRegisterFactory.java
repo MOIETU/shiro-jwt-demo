@@ -1,6 +1,5 @@
 package com.shaylee.shirojwt.module.member.factory;
 
-import com.google.common.base.Joiner;
 import com.shaylee.shirojwt.module.member.constant.MemberConstant;
 import com.shaylee.shirojwt.module.member.constant.MemberSecurityConstant;
 import com.shaylee.shirojwt.module.member.entity.Member;
@@ -11,13 +10,10 @@ import com.shaylee.shirojwt.module.member.request.RegisterRequest;
 import com.shaylee.shirojwt.security.model.MemberLoginDTO;
 import com.shaylee.shirojwt.security.utils.PasswordUtils;
 import com.shaylee.shirojwt.utils.useragent.UserAgentUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Title: 会员实体工厂
@@ -28,12 +24,12 @@ import java.util.List;
  */
 public class MemberRegisterFactory {
 
-    public static Member buildRegisterMember(RegisterRequest registerReq, String memberNo) {
+    public static Member buildRegisterMember(RegisterRequest registerRequest, String memberNo) {
         Member member = new Member();
         Date currentDate = new Date();
         // 设置基础信息
-        member.setAreaCode(registerReq.getAreaCode());
-        member.setPhone(registerReq.getPhone());
+        member.setAreaCode(registerRequest.getAreaCode());
+        member.setPhone(registerRequest.getPhone());
         // 设置业务信息
         member.setNo(memberNo);
         member.setType(MemberConstant.TYPE_NORMAL);
@@ -44,11 +40,11 @@ public class MemberRegisterFactory {
         return member;
     }
 
-    public static MemberSecurity buildRegisterMemberSecurity(HttpServletRequest request, RegisterRequest registerReq, String memberNo) {
+    public static MemberSecurity buildRegisterMemberSecurity(HttpServletRequest request, RegisterRequest registerRequest, String memberNo) {
         MemberSecurity memberSecurity = new MemberSecurity();
         Date currentDate = new Date();
-        String phone = registerReq.getPhone();
-        String password = registerReq.getPassword();
+        String phone = registerRequest.getPhone();
+        String password = registerRequest.getPassword();
         String salt = PasswordUtils.randomSalt();
         String ipAddr = UserAgentUtils.getIpAddr(request);
         // 密码加密
@@ -60,7 +56,7 @@ public class MemberRegisterFactory {
         memberSecurity.setSalt(salt);
         memberSecurity.setPassword(cryptograph);
         memberSecurity.setOnline(MemberConstant.OFFLINE);
-        memberSecurity.setAreaCode(registerReq.getAreaCode());
+        memberSecurity.setAreaCode(registerRequest.getAreaCode());
         memberSecurity.setStatus(MemberSecurityConstant.STATUS_EDIT);
         memberSecurity.setAbnormal(MemberSecurityConstant.ABNORMAL_NORMAL);
         // 设置注册IP
@@ -81,19 +77,19 @@ public class MemberRegisterFactory {
         return memberSecurity;
     }
 
-    public static Member buildRegisterMemberDetail(RegisterExtendRequest registerReqExtend, Member member) {
-        Integer gender = registerReqExtend.getGender();
-        member.setName(registerReqExtend.getName());
+    public static Member buildRegisterMemberDetail(RegisterExtendRequest registerExtendRequest, Member member) {
+        Integer gender = registerExtendRequest.getGender();
+        member.setName(registerExtendRequest.getName());
         member.setGender(gender);
         member.setUpdateDate(new Date());
         return member;
     }
 
-    public static MemberExtend buildRegisterMemberExtend(RegisterExtendRequest registerReqExtend) {
+    public static MemberExtend buildRegisterMemberExtend(RegisterExtendRequest registerExtendRequest) {
         Date currentDate = new Date();
         MemberExtend memberExtend = new MemberExtend();
-        BeanUtils.copyProperties(registerReqExtend, memberExtend);
-        memberExtend.setMemberId(registerReqExtend.getMemberId());
+        BeanUtils.copyProperties(registerExtendRequest, memberExtend);
+        memberExtend.setMemberId(registerExtendRequest.getMemberId());
         memberExtend.setCreateDate(currentDate);
         memberExtend.setUpdateDate(currentDate);
         memberExtend.setDelFlag(MemberConstant.DEL_FLAG_NORMAL);
