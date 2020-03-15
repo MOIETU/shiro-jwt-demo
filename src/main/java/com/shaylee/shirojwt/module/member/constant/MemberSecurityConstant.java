@@ -40,14 +40,6 @@ public class MemberSecurityConstant implements BaseConstant {
     public static final String MEMBER_NO_PREFIX = "";
 
     /**
-     * 字典表，短信验证码失效时间(单位秒)
-     */
-    /** 短信验证码失效时间，字典表type */
-    public static final String DICT_TYPE_SMS= "expire";
-    /** 短信验证码失效时间，字典表label */
-    public static final String DICT_LABEL_SMS = "sms";
-
-    /**
      * 登录相关常量
      */
     /** 手机号登录默认区号 */
@@ -68,14 +60,4 @@ public class MemberSecurityConstant implements BaseConstant {
      */
     /** 会员安全实体key(缓存结构 member_security field:{memberNo} value:{memberSecurity}) */
     public static final String REDIS_KEY_MEMBER_SECURITY = "member_security";
-
-    /**
-     * 支付设备类型
-     */
-    /** Android */
-    public static final Integer PAY_DEVICE_TYPE_ANDROID = 1;
-    /** IOS */
-    public static final Integer PAY_DEVICE_TYPE_IOS = 2;
-    /** IOS-会员版 */
-    public static final Integer PAY_DEVICE_TYPE_IOS_PRO = 3;
 }

@@ -36,7 +36,7 @@ public class MemberRegisterFactory {
         member.setPhone(registerReq.getPhone());
         // 设置业务信息
         member.setNo(memberNo);
-        member.setType(MemberConstant.TYPE_UNAUTH);
+        member.setType(MemberConstant.TYPE_NORMAL);
         // 设置基础属性
         member.setCreateDate(currentDate);
         member.setUpdateDate(currentDate);
