@@ -37,9 +37,17 @@ public class SecurityConstant {
      */
     public static final Long JWT_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000L;
     /**
+     * JWT刷新后原Token可用时间，20秒(毫秒)
+     */
+    public static final Long JWT_EXPIRE_TIME_TEMP = 20 * 1000L;
+    /**
      * JWT会员登录Token存储(结构key->member_token:memberNo value->token)
      */
     public static final String REDIS_KEY_JWT = "member_token:{0}";
+    /**
+     * 已过期的JWT会员登录Token存储，已过期的Token默认还可以使用20秒(结构key->member_token_temp:memberNo value->token)
+     */
+    public static final String REDIS_KEY_JWT_TEMP = "member_token_temp:{0}";
 
     /**
      * 自定义shiro过滤器名

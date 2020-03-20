@@ -29,6 +29,14 @@ public interface MemberTokenService {
     SignInfo refreshToken(MemberSecurity memberSecurity);
 
     /**
+     * 保存会员旧token(允许旧token可以继续使用20秒)
+     *
+     * @param token 旧token
+     * @return 失败则表示旧Token已经保存过
+     */
+    Boolean saveTokenToTemp(String token);
+
+    /**
      * 根据会员号销毁token
      *
      * @param memberNo 会员号

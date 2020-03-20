@@ -62,8 +62,14 @@ public class JwtRealm extends AuthorizingRealm {
         String tokenKey = MessageFormat.format(SecurityConstant.REDIS_KEY_JWT, memberNo);
         Object tokenCache = redisCache.get(tokenKey);
         if (!token.equals(tokenCache)) {
-            logger.debug("token invalid");
-            throw new AuthenticationException("token invalid");
+            // 检查临时token是否匹配
+            String tempTokenKey = MessageFormat.format(SecurityConstant.REDIS_KEY_JWT_TEMP, memberNo);
+            Object tempTokenCache = redisCache.get(tempTokenKey);
+            if (!token.equals(tempTokenCache)) {
+                // token与临时token都失效，验证失败
+                logger.debug("token invalid");
+                throw new AuthenticationException("token invalid");
+            }
         }
         // 检查会员是否存在
         MemberSecurity memberSecurity = memberSecurityService.getMemberSecurityCache(memberNo);

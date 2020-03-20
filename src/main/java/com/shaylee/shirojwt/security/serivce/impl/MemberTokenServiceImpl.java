@@ -39,12 +39,14 @@ public class MemberTokenServiceImpl implements MemberTokenService {
         // token是否有效
         String memberTokenKey = MessageFormat.format(SecurityConstant.REDIS_KEY_JWT, memberNo);
         String tokenCache = (String) redisCache.get(memberTokenKey);
-        if (tokenCache == null) {
-            return false;
+        if (!token.equals(tokenCache)) {
+            // 临时token是否有效
+            String tempTokenKey = MessageFormat.format(SecurityConstant.REDIS_KEY_JWT_TEMP, memberNo);
+            String tempTokenCache = (String) redisCache.get(tempTokenKey);
+            return token.equals(tempTokenCache);
         }
-        return token.equals(tokenCache);
+        return true;
     }
-
 
     @Override
     public SignInfo refreshToken(MemberSecurity memberSecurity) {
@@ -56,6 +58,21 @@ public class MemberTokenServiceImpl implements MemberTokenService {
         // 添加新token
         redisCache.set(memberTokenKey, signInfo.getToken(), signInfo.getExpireDate().getTime() - System.currentTimeMillis());
         return signInfo;
+    }
+
+    @Override
+    public Boolean saveTokenToTemp(String token) {
+        String memberNo = JwtUtil.getMemberNo(token);
+        if (memberNo == null) {
+            return false;
+        }
+        String memberTokenKey = MessageFormat.format(SecurityConstant.REDIS_KEY_JWT_TEMP, memberNo);
+        if(redisCache.get(memberTokenKey) != null) {
+            return false;
+        }
+        // token信息写入缓存,token设置失效时间20秒(毫秒失效)
+        redisCache.set(memberTokenKey, token, SecurityConstant.JWT_EXPIRE_TIME_TEMP);
+        return true;
     }
 
     @Override

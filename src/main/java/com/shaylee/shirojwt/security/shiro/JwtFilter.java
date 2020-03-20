@@ -180,12 +180,15 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         }
         // 计算token失效时间
         if (System.currentTimeMillis() - SecurityConstant.JWT_EXPIRE_TIME_SHORT > expireDate.getTime() - SecurityConstant.JWT_EXPIRE_TIME) {
-            // 当前时间 - 旧token生成时间 > 5分钟。生成新token
-            SignInfo signInfo = memberTokenService.refreshToken(memberSecurity);
-            // 最后将刷新的Token存放在Response的Header中的token字段返回
-            HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-            httpServletResponse.setHeader(SecurityConstant.REQUEST_HEADER_TOKEN, signInfo.getToken());
-            httpServletResponse.setHeader(RESPONSE_HEADER_PROPERTY_HEADERS, SecurityConstant.REQUEST_HEADER_TOKEN);
+            // 当前时间 - 旧token生成时间 > 5分钟。将旧token存到临时token
+            if(memberTokenService.saveTokenToTemp(token)) {
+                // 生成新token
+                SignInfo signInfo = memberTokenService.refreshToken(memberSecurity);
+                // 最后将刷新的Token存放在Response的Header中的token字段返回
+                HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
+                httpServletResponse.setHeader(SecurityConstant.REQUEST_HEADER_TOKEN, signInfo.getToken());
+                httpServletResponse.setHeader(RESPONSE_HEADER_PROPERTY_HEADERS, SecurityConstant.REQUEST_HEADER_TOKEN);
+            }
         }
     }
 }
