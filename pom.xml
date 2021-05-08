@@ -26,7 +26,7 @@
         <shardingsphere.version>4.0.0</shardingsphere.version>
 
         <java-jwt.version>3.4.0</java-jwt.version>
-        <shiro.version>1.5.1</shiro.version>
+        <shiro.version>1.6.0</shiro.version>
         <bitwalker.version>1.21</bitwalker.version>
     </properties>
 
